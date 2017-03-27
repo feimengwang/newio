@@ -8,7 +8,7 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-public class CopyFile {
+public class FastCopyFile {
 
 	public static void main(String[] args) {
 		FileInputStream fileInputStream;
@@ -18,7 +18,7 @@ public class CopyFile {
 			fileOutputStream = new FileOutputStream("src/CopyTestReadFile.txt");
 			FileChannel fileReadChannel = fileInputStream.getChannel();
 			FileChannel fileWriteChannel = fileOutputStream.getChannel();
-			ByteBuffer buffer = ByteBuffer.allocateDirect(1024);//直接缓冲区
+			ByteBuffer buffer = ByteBuffer.allocate(1024);
 			while (true) {
 				buffer.clear();
 				int i = fileReadChannel.read(buffer);

@@ -19,6 +19,7 @@ public class WriteFile {
 				buffer.put(message[i]);
 			}
 			buffer.flip();
+			
 			fc.write(buffer);
 			fout.close();
 		} catch (FileNotFoundException e) {
