@@ -2,32 +2,35 @@ package cn.true123.nio;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-public class ReadFile {
+public class CopyFile {
 
 	public static void main(String[] args) {
 		FileInputStream fileInputStream;
+		FileOutputStream fileOutputStream;
 		try {
 			fileInputStream = new FileInputStream("src/testReadFile.txt");
-			FileChannel fileChannel = fileInputStream.getChannel();
+			fileOutputStream = new FileOutputStream("src/CopyTestReadFile.txt");
+			FileChannel fileReadChannel = fileInputStream.getChannel();
+			FileChannel fileWriteChannel = fileOutputStream.getChannel();
 			ByteBuffer buffer = ByteBuffer.allocate(1024);
-			fileChannel.read(buffer);
-			buffer.flip();
-			 int i=0;
-			    while (buffer.remaining()>0) {
-			      byte b = buffer.get();
-			      System.out.println( "Character "+i+": "+((char)b) );
-			      if(!buffer.hasRemaining()){
-			    	  fileChannel.read(buffer);
-			      }
-			      i++;
-			    }
+			while (true) {
+				buffer.clear();
+				int i = fileReadChannel.read(buffer);
+				if (i == -1) {
+					break;
+				}
+				buffer.flip();
+				fileWriteChannel.write(buffer);
 
-			    fileInputStream.close();
+			}
+			fileInputStream.close();
+			fileOutputStream.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -35,8 +38,7 @@ public class ReadFile {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
 }
